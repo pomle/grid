@@ -90,7 +90,7 @@ export function grid(size: Record<'x' | 'y' | 'z', number>, index: number) {
 export class Grid<T, Dim extends string> {
   dims: Dim[];
   size: Coord<Dim>;
-  data: ArrayLike<T>;
+  data: Array<T>;
 
   constructor(size: Coord<Dim>) {
     this.size = size;
@@ -107,17 +107,22 @@ export class Grid<T, Dim extends string> {
   }
 
   toCoord(index: number) {
-    console.log(this.dims);
-    // const sizeX = this.size[this.dims[0]];
-    const sizeY = this.size[this.dims[1]];
-    const sizeZ = this.size[this.dims[2]];
+    return gridIndex(this.size, index);
+  }
 
-    let rest = index;
-    const x = Math.floor(rest / (sizeY * sizeZ));
-    rest -= x * (sizeY * sizeZ);
-    const y = Math.floor(rest / sizeY);
-    rest -= y * sizeY;
-    return { x, y, z: rest };
+  get(coord: Coord<Dim>): T | undefined {
+    const index = this.toIndex(coord);
+    return this.data[index];
+  }
+
+  set(coord: Coord<Dim>, value: T) {
+    const index = this.toIndex(coord);
+    this.data[index] = value;
+  }
+
+  delete(coord: Coord<Dim>) {
+    const index = this.toIndex(coord);
+    delete this.data[index];
   }
 
   *neighbours(center: Coord<Dim>) {

@@ -1,6 +1,6 @@
 import { Grid, gridIndex, linearIndex } from '../grid';
 
-describe('linear', () => {
+describe('linearIndex', () => {
   it('creates a unique linear index for each coord', () => {
     const size = { x: 30, y: 60, z: 90 };
     const grid = new Grid(size);
@@ -50,6 +50,147 @@ describe('Grid', () => {
     ]);
   });
 
+  it('iterates over each neighbour coord in 3D', () => {
+    const grid = new Grid({ x: 3, y: 3, z: 3 });
+    expect([...grid.neighbours({ x: 1, y: 1, z: 1 })]).toEqual([
+      {
+        x: 0,
+        y: 0,
+        z: 0,
+      },
+      {
+        x: 0,
+        y: 0,
+        z: 1,
+      },
+      {
+        x: 0,
+        y: 0,
+        z: 2,
+      },
+      {
+        x: 0,
+        y: 1,
+        z: 0,
+      },
+      {
+        x: 0,
+        y: 1,
+        z: 1,
+      },
+      {
+        x: 0,
+        y: 1,
+        z: 2,
+      },
+      {
+        x: 0,
+        y: 2,
+        z: 0,
+      },
+      {
+        x: 0,
+        y: 2,
+        z: 1,
+      },
+      {
+        x: 0,
+        y: 2,
+        z: 2,
+      },
+      {
+        x: 1,
+        y: 0,
+        z: 0,
+      },
+      {
+        x: 1,
+        y: 0,
+        z: 1,
+      },
+      {
+        x: 1,
+        y: 0,
+        z: 2,
+      },
+      {
+        x: 1,
+        y: 1,
+        z: 0,
+      },
+      {
+        x: 1,
+        y: 1,
+        z: 1,
+      },
+      {
+        x: 1,
+        y: 1,
+        z: 2,
+      },
+      {
+        x: 1,
+        y: 2,
+        z: 0,
+      },
+      {
+        x: 1,
+        y: 2,
+        z: 1,
+      },
+      {
+        x: 1,
+        y: 2,
+        z: 2,
+      },
+      {
+        x: 2,
+        y: 0,
+        z: 0,
+      },
+      {
+        x: 2,
+        y: 0,
+        z: 1,
+      },
+      {
+        x: 2,
+        y: 0,
+        z: 2,
+      },
+      {
+        x: 2,
+        y: 1,
+        z: 0,
+      },
+      {
+        x: 2,
+        y: 1,
+        z: 1,
+      },
+      {
+        x: 2,
+        y: 1,
+        z: 2,
+      },
+      {
+        x: 2,
+        y: 2,
+        z: 0,
+      },
+      {
+        x: 2,
+        y: 2,
+        z: 1,
+      },
+      {
+        x: 2,
+        y: 2,
+        z: 2,
+      },
+    ]);
+  });
+
   it('iterates over cells in 1D', () => {
     const grid = new Grid({ x: 3 });
     expect([...grid]).toEqual([{ x: 0 }, { x: 1 }, { x: 2 }]);
@@ -73,8 +214,8 @@ describe('Grid', () => {
 
   it('builds expected index for 2D', () => {
     const grid = new Grid({ x: 100, y: 20 });
-    expect(grid.toIndex({ x: 1, y: 0 })).toEqual(100);
-    expect(grid.toIndex({ x: 10, y: 9 })).toEqual(1009);
+    expect(grid.toIndex({ x: 1, y: 0 })).toEqual(1);
+    expect(grid.toIndex({ x: 10, y: 9 })).toEqual(910);
   });
 
   it('resolves expected coord for one dimension', () => {
@@ -84,10 +225,28 @@ describe('Grid', () => {
     expect(grid.toCoord(4)).toEqual({ x: 4 });
   });
 
-  it('resolves expected coord for two dimension', () => {
+  it('resolves expected coord', () => {
     const grid = new Grid({ x: 10, y: 100, z: 1000 });
     const index = grid.toIndex({ x: 5, y: 20, z: 500 });
-    console.log('Index', index);
     expect(grid.toCoord(index)).toEqual({ x: 5, y: 20, z: 500 });
+  });
+
+  it('stores without collision', () => {
+    const grid = new Grid<number, 'x' | 'y' | 'z'>({
+      x: 10,
+      y: 100,
+      z: 1000,
+    });
+    let value = 0;
+    for (const coord of grid) {
+      grid.set(coord, value++);
+    }
+    const values = new Set<number>([0]);
+    for (const coord of grid) {
+      const value = grid.get(coord);
+      expect(value).not.toBe(undefined);
+      values.add(value ?? 0);
+    }
+    expect(values.size).toBe(1000000);
   });
 });

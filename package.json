@@ -1,17 +1,15 @@
 {
-  "name": "@pomle/paths",
-  "version": "1.4.0",
-  "description": "TypeScript library for handling type safe and type rich paths and query params",
+  "name": "@pomle/grid",
+  "version": "0.0.0",
+  "description": "TypeScript Grid class for grids of any size and dimension.",
   "author": "Pontus Alexander <pontus.alexander@gmail.com>",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/pomle/paths"
+    "url": "git+https://github.com/pomle/grid"
   },
   "keywords": [
-    "path param",
-    "query string",
-    "type safety"
+    "grid"
   ],
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
@@ -27,7 +25,6 @@
   },
   "peerDependencies": {},
   "devDependencies": {
-    "@testing-library/jest-dom": "^4.2.4",
     "@types/jest": "^25.1.4",
     "@types/node": "^12.12.38",
     "@typescript-eslint/eslint-plugin": "^5.10.1",
