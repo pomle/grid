@@ -1,4 +1,17 @@
-import { Grid } from '../grid';
+import { Grid, linearIndex } from '../grid';
+
+describe('linear', () => {
+  it('creates a unique linear index for each coord', () => {
+    const size = { x: 30, y: 60, z: 90 };
+    const grid = new Grid(size);
+    const indices = new Set<number>();
+    for (const coord of grid) {
+      const index = linearIndex(size, coord);
+      indices.add(index);
+    }
+    expect(indices.size).toEqual(30 * 60 * 90);
+  });
+});
 
 describe('Grid', () => {
   it('iterates over each neighbour coord in 1D', () => {
@@ -40,17 +53,29 @@ describe('Grid', () => {
     ]);
   });
 
-  it.skip('resolves expected coord for one dimension', () => {
+  it('builds expected index for 1D', () => {
+    const grid = new Grid({ x: 5 });
+    expect(grid.toIndex({ x: 0 })).toEqual(0);
+    expect(grid.toIndex({ x: 4 })).toEqual(4);
+  });
+
+  it('builds expected index for 2D', () => {
+    const grid = new Grid({ x: 100, y: 20 });
+    expect(grid.toIndex({ x: 1, y: 0 })).toEqual(100);
+    expect(grid.toIndex({ x: 10, y: 9 })).toEqual(1009);
+  });
+
+  it('resolves expected coord for one dimension', () => {
     const grid = new Grid({ x: 5 });
     expect(grid.toCoord(0)).toEqual({ x: 0 });
     expect(grid.toCoord(1)).toEqual({ x: 1 });
     expect(grid.toCoord(4)).toEqual({ x: 4 });
   });
 
-  it.skip('resolves expected coord for two dimension', () => {
-    const grid = new Grid({ x: 5, y: 5 });
-    expect(grid.toCoord(0)).toEqual({ x: 0, y: 0 });
-    expect(grid.toCoord(1)).toEqual({ x: 0, y: 1 });
-    expect(grid.toCoord(5)).toEqual({ x: 1, y: 0 });
+  it('resolves expected coord for two dimension', () => {
+    const grid = new Grid({ x: 10, y: 100, z: 1000 });
+    const index = grid.toIndex({ x: 5, y: 20, z: 500 });
+    console.log('Index', index);
+    expect(grid.toCoord(index)).toEqual({ x: 5, y: 20, z: 500 });
   });
 });
