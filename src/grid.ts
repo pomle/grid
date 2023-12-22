@@ -55,6 +55,38 @@ export function linearIndex<Dim extends string>(
   return index;
 }
 
+export function gridIndex<Dim extends string>(
+  size: Record<Dim, number>,
+  index: number,
+) {
+  const dims = Object.keys(size) as Dim[];
+  const multipliers: number[] = [];
+
+  const coord: Partial<Record<Dim, number>> = {};
+
+  for (const dim of dims) {
+    let divisor = 1;
+    for (const m of multipliers) {
+      divisor *= m;
+    }
+
+    coord[dim] = Math.floor(index / divisor) % size[dim];
+    multipliers.push(size[dim]);
+  }
+
+  return coord;
+}
+
+export function grid(size: Record<'x' | 'y' | 'z', number>, index: number) {
+  const coord: Partial<Record<'x' | 'y' | 'z', number>> = {};
+
+  coord.x = index % size.x;
+  coord.y = (index / size.x) % size.y;
+  coord.z = (index / (size.x * size.y)) % size.z;
+
+  return coord;
+}
+
 export class Grid<T, Dim extends string> {
   dims: Dim[];
   size: Coord<Dim>;

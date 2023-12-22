@@ -1,4 +1,4 @@
-import { Grid, linearIndex } from '../grid';
+import { Grid, gridIndex, linearIndex } from '../grid';
 
 describe('linear', () => {
   it('creates a unique linear index for each coord', () => {
@@ -10,6 +10,18 @@ describe('linear', () => {
       indices.add(index);
     }
     expect(indices.size).toEqual(30 * 60 * 90);
+  });
+});
+
+describe('gridIndex', () => {
+  it('resolves expected coord for each linear index', () => {
+    const size = { x: 30, y: 60, z: 90 };
+    const grid = new Grid(size);
+    for (const coord of grid) {
+      const index = linearIndex(size, coord);
+      const resolved = gridIndex(size, index);
+      expect(resolved).toEqual(coord);
+    }
   });
 });
 
