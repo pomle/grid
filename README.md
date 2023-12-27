@@ -26,7 +26,7 @@ import { Grid } from '@pomle/grid';
 const grid = new Grid({ width: 320, height: 240 });
 ```
 
-### Dimensions can use number of dimensions
+### Dimensions can use any number of dimensions
 
 ```ts
 import { Grid } from '@pomle/grid';
